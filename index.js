@@ -1,39 +1,45 @@
- const {useState, useEffect} = React;
+ const {useState} = React;
 
 const App = () => {
   return(
-    <div>
-  <h4>Search a user Github Repo</h4>
+     <div>
   <SearchRepo />
      </div>
-  ) 
-} 
-const SearchRepo = () => {
-  const [searchrepo,  setSearchRepo] =        useState("");
+  )
+}
+
+  const SearchRepo = () => {
+  const [searchrepo, setSearchrepo] = useState("");
   const [list, setList] = useState([]);
+  const client = axios.create({baseURL:`https://api.github.com/users/${searchrepo}/repos`});
+ 
   const handleChange = e => {
-    setSearchRepo(e.target.value) 
-  } 
-  const handleClick = () => {
- axios.get(`https://api.github.com/users/${searchrepo}/repos`).then(response=>
-      setList(response.data))
-       setSearchRepo("")
+    setSearchrepo(e.target.value);
   }
-  console.log(searchrepo)
+  const handleClick = () => {
+      async function getRepo(){
+      const response = await client.get("");
+      setList(response.data);
+      setSearchrepo("");
+    }
+    getRepo();
+  }
   return(
     <>
+  <div>
     <input type="text" value = {searchrepo} onChange={handleChange} />
-      <button onClick ={handleClick}>Search</button>
-   <ListRepo list = {list} />
+     <button onClick={handleClick}>Search</button>
+  </div>
+      <ListRepo list = {list} />
     </>
-  ) 
+  )
 }
-   const ListRepo = (props) => {
-   const { list } = props;
-   
-   return(
-   <ul>{list.map(item=>{return(<li key={item.id} >{item.name}</li>)})}</ul>
- ) 
- }
-ReactDOM.render(<App />, document.getElementById("root")) 
-root")) 
+  
+  const ListRepo = ({list}) => {
+    return(
+    <ul>{list.map(item=>{return(<li key={item.id}>{item.name}</li>)
+        })}</ul>
+    )
+  }
+  
+  ReactDOM.render(<App />, document.getElementById("root"))
