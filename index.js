@@ -1,8 +1,9 @@
- const {useState} = React;
+const {useState} = React;
 
-const App = () => {
+ const App = () => {
   return(
      <div>
+      <h4>Search a Github user Repositories</h4>
   <SearchRepo />
      </div>
   )
@@ -34,8 +35,11 @@ const App = () => {
     </>
   )
 }
-  
+
+
   const ListRepo = ({list}) => {
+    if(list.length == 0) return "No repos found or enter another user";
+    <hr></hr>
     return(
     <ul>{list.map(item=>{return(<li key={item.id}>{item.name}</li>)
         })}</ul>
